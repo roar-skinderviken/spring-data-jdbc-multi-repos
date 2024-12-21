@@ -20,35 +20,35 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class UsersControllerTest {
 
-  @LocalServerPort
-  int port;
-  RestTemplate client;
+    @LocalServerPort
+    int port;
+    RestTemplate client;
 
-  @MockitoSpyBean
-  Db1UserRepository repository1;
+    @MockitoSpyBean
+    Db1UserRepository repository1;
 
-  @MockitoSpyBean
-  Db2UserRepository repository2;
+    @MockitoSpyBean
+    Db2UserRepository repository2;
 
-  @BeforeEach
-  void beforeEach() {
-    client = new RestTemplateBuilder()
-            .rootUri("http://localhost:%d".formatted(port))
-            .build();
-  }
+    @BeforeEach
+    void beforeEach() {
+        client = new RestTemplateBuilder()
+                .rootUri("http://localhost:%d".formatted(port))
+                .build();
+    }
 
-  @Test
-  void testGetUsers() {
-    Users users = client.getForObject("/users", Users.class);
-    assertNotNull(users);
-    assertThat(users.getUsers()).hasSize(4);
+    @Test
+    void testGetUsers() {
+        Users users = client.getForObject("/users", Users.class);
+        assertNotNull(users);
+        assertThat(users.getUsers()).hasSize(4);
 
-    // "foo", "bar" is from db1, "hoge", "piyo" from db2
-    assertThat(users.getUsers())
-            .extracting(User::getName)
-            .containsExactlyInAnyOrder("foo", "bar", "hoge", "piyo");
+        // "foo", "bar" is from db1, "hoge", "piyo" from db2
+        assertThat(users.getUsers())
+                .extracting(User::getName)
+                .containsExactlyInAnyOrder("foo", "bar", "hoge", "piyo");
 
-    verify(repository1).findAll();
-    verify(repository2).findAll();
-  }
+        verify(repository1).findAll();
+        verify(repository2).findAll();
+    }
 }
