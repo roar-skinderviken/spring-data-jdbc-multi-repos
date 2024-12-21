@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.data.jdbc.core.convert.DataAccessStrategy;
 import org.springframework.data.jdbc.core.convert.JdbcConverter;
@@ -38,14 +39,14 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @EnableJdbcRepositories(
-    repositoryFactoryBeanClass = JdbcRepositoryFactoryBeanDb1.class,
-    transactionManagerRef = "transactionManagerDb1",
-    basePackages = {
-        "com.kota65535.repository.one"
-    }
+        repositoryFactoryBeanClass = JdbcRepositoryFactoryBeanDb1.class,
+        transactionManagerRef = "transactionManagerDb1",
+        basePackages = {
+                "com.kota65535.repository.one"
+        }
 )
 @EnableAutoConfiguration(
-    exclude = {DataSourceAutoConfiguration.class, JdbcRepositoriesAutoConfiguration.class}
+        exclude = {DataSourceAutoConfiguration.class, JdbcRepositoriesAutoConfiguration.class}
 )
 @Configuration
 @ConfigurationPropertiesScan
@@ -58,6 +59,7 @@ public class Db1Config {
     this.base.setApplicationContext(applicationContext);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   @ConfigurationProperties(prefix = "spring.datasources.one")
@@ -65,74 +67,83 @@ public class Db1Config {
     return DataSourceBuilder.create().type(HikariDataSource.class).build();
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public NamedParameterJdbcOperations jdbcOperationsDb1(
-      @Qualifier("db1") DataSource dataSource
+          @Qualifier("db1") DataSource dataSource
   ) {
     return new NamedParameterJdbcTemplate(dataSource);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public PlatformTransactionManager transactionManagerDb1(
-      @Qualifier("db1") DataSource dataSource
+          @Qualifier("db1") DataSource dataSource
   ) {
     return new JdbcTransactionManager(dataSource);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public RelationalManagedTypes jdbcManagedTypesDb1() throws ClassNotFoundException {
     return base.jdbcManagedTypes();
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public JdbcMappingContext jdbcMappingContextDb1(
-      Optional<NamingStrategy> namingStrategy,
-      @Qualifier("db1") JdbcCustomConversions customConversions,
-      @Qualifier("db1") RelationalManagedTypes jdbcManagedTypes) {
+          Optional<NamingStrategy> namingStrategy,
+          @Qualifier("db1") JdbcCustomConversions customConversions,
+          @Qualifier("db1") RelationalManagedTypes jdbcManagedTypes) {
     return base.jdbcMappingContext(namingStrategy, customConversions, jdbcManagedTypes);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public JdbcConverter jdbcConverterDb1(
-      @Qualifier("db1") JdbcMappingContext mappingContext,
-      @Qualifier("db1") NamedParameterJdbcOperations operations,
-      @Qualifier("db1") @Lazy RelationResolver relationResolver,
-      @Qualifier("db1") JdbcCustomConversions conversions,
-      @Qualifier("db1") Dialect dialect) {
+          @Qualifier("db1") JdbcMappingContext mappingContext,
+          @Qualifier("db1") NamedParameterJdbcOperations operations,
+          @Qualifier("db1") @Lazy RelationResolver relationResolver,
+          @Qualifier("db1") JdbcCustomConversions conversions,
+          @Qualifier("db1") Dialect dialect) {
     return base.jdbcConverter(mappingContext, operations, relationResolver, conversions, dialect);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public JdbcCustomConversions jdbcCustomConversionsDb1() {
     return base.jdbcCustomConversions();
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public JdbcAggregateTemplate jdbcAggregateTemplateDb1(
-      ApplicationContext applicationContext,
-      @Qualifier("db1") JdbcMappingContext mappingContext,
-      @Qualifier("db1") JdbcConverter converter,
-      @Qualifier("db1") DataAccessStrategy dataAccessStrategy) {
+          ApplicationContext applicationContext,
+          @Qualifier("db1") JdbcMappingContext mappingContext,
+          @Qualifier("db1") JdbcConverter converter,
+          @Qualifier("db1") DataAccessStrategy dataAccessStrategy) {
     return base.jdbcAggregateTemplate(applicationContext, mappingContext, converter, dataAccessStrategy);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public DataAccessStrategy dataAccessStrategyDb1(
-      @Qualifier("db1") NamedParameterJdbcOperations operations,
-      @Qualifier("db1") JdbcConverter jdbcConverter,
-      @Qualifier("db1") JdbcMappingContext context,
-      @Qualifier("db1") Dialect dialect) {
+          @Qualifier("db1") NamedParameterJdbcOperations operations,
+          @Qualifier("db1") JdbcConverter jdbcConverter,
+          @Qualifier("db1") JdbcMappingContext context,
+          @Qualifier("db1") Dialect dialect) {
     return base.dataAccessStrategyBean(operations, jdbcConverter, context, dialect);
   }
 
+  @Primary
   @Bean
   @Qualifier("db1")
   public Dialect jdbcDialectDb1(@Qualifier("db1") NamedParameterJdbcOperations operations) {
@@ -140,7 +151,7 @@ public class Db1Config {
   }
 
   public static class JdbcRepositoryFactoryBeanDb1<T extends Repository<S, ID>, S, ID extends Serializable> extends
-      JdbcRepositoryFactoryBean<T, S, ID> {
+          JdbcRepositoryFactoryBean<T, S, ID> {
 
     public JdbcRepositoryFactoryBeanDb1(Class<T> repositoryInterface) {
       super(repositoryInterface);

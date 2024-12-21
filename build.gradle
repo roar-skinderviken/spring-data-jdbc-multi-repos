@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.kota65535"
-sourceCompatibility = "17"
+sourceCompatibility = "21"
 
 repositories {
     mavenLocal()
@@ -28,7 +28,7 @@ dependencies {
     // MySQL
     runtimeOnly "mysql:mysql-connector-java:8.0.33"
     // PostgreSQL
-    runtimeOnly "org.postgresql:postgresql:42.6.0"
+    runtimeOnly "org.postgresql:postgresql:42.7.4"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
